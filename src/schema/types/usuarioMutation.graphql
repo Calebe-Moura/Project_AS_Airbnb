@@ -1,0 +1,3 @@
+extend type Mutation {
+    createUsuario(input: createUsuarioInput!): Usuario
+}

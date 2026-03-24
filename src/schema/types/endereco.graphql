@@ -1,0 +1,21 @@
+type Endereco {
+  id: Int!
+  rua: String!
+  numero: Int!
+  cidade: String!
+  estado: String!
+  cep: String
+  pais: String
+  longitude: Float
+  latitude: Float
+}
+
+input createEnderecoInput {
+  rua: String!
+  numero: Int!
+  cidade: String!
+  estado: String!
+  cep: String!
+  logitude: Float
+  latitude: Float
+}

@@ -1,0 +1,30 @@
+{
+  "name": "graphql_airbn",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "docker:up": "docker compose up -d",
+    "prisma:generate": "prisma generate",
+    "prisma:migrate": "prisma migrate dev --name init",
+    "start:server": "node src/server.js",
+    "prisma:push": "prisma db push",
+    "prisma:pull": "prisma db pull",
+    "seed": "node prisma/seed.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "devDependencies": {
+    "prisma": "^6.19.2"
+  },
+  "dependencies": {
+    "@apollo/server": "^5.4.0",
+    "@graphql-tools/load-files": "^7.0.1",
+    "@graphql-tools/merge": "^9.1.7",
+    "@prisma/client": "^6.19.2",
+    "dotenv": "^17.3.1",
+    "graphql": "^16.13.1"
+  }
+}
