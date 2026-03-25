@@ -1,0 +1,38 @@
+enum MetodoPagamento {
+  PIX
+  CARTAO
+  BOLETO
+}
+
+enum StatusPagamento {
+  PENDENTE
+  PAGO
+  CANCELADO
+}
+
+type Pagamento {
+  id: Int!
+  valor: Float!
+  metodo: MetodoPagamento!
+  status: StatusPagamento!
+  dataPagamento: DateTime
+  aluguel: Aluguel!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+input CreatePagamentoInput {
+  valor: Float!
+  metodo: MetodoPagamento!
+  status: StatusPagamento!
+  dataPagamento: DateTime
+  aluguelId: Int!
+}
+
+input UpdatePagamentoInput {
+  valor: Float
+  metodo: MetodoPagamento
+  status: StatusPagamento
+  dataPagamento: DateTime
+  aluguelId: Int
+}

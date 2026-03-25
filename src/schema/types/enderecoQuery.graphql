@@ -1,4 +1,6 @@
 extend type Query {
-  enderecos: [Endereco]!
+  enderecos: [Endereco!]!
   endereco(id: Int!): Endereco
+  enderecosByCidade(cidade: String!): [Endereco!]!
+  enderecosByEstado(estado: String!): [Endereco!]!
 }

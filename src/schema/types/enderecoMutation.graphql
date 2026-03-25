@@ -1,3 +1,7 @@
 extend type Mutation {
-  createEndereco(input: createEnderecoInput!): Endereco
+  createEndereco(data: CreateEnderecoInput!): Endereco!
+  updateEndereco(id: Int!, data: UpdateEnderecoInput!): Endereco!
+  deleteEndereco(id: Int!): Boolean!
+  associarEnderecoUsuario(enderecoId: Int!, usuarioId: Int!): Endereco!
+  associarEnderecoProprietario(enderecoId: Int!, proprietarioId: Int!): Endereco!
 }

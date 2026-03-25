@@ -1,0 +1,23 @@
+type Avaliacao {
+  id: Int!
+  nota: Int!
+  comentario: String
+  usuario: Usuario!
+  aluguel: Aluguel!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+input CreateAvaliacaoInput {
+  nota: Int!
+  comentario: String
+  aluguelId: Int!
+  usuarioId: Int!
+}
+
+input UpdateAvaliacaoInput {
+  nota: Int
+  comentario: String
+  aluguelId: Int
+  usuarioId: Int
+}

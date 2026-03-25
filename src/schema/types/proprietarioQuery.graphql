@@ -1,0 +1,4 @@
+extend type Query {
+  proprietarios: [Proprietario!]!
+  proprietario(id: Int!): Proprietario
+}

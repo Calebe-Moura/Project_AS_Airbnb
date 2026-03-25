@@ -1,0 +1,34 @@
+type Aluguel {
+  id: Int!
+  titulo: String!
+  descricao: String!
+  preco: Float!
+  dataInicio: DateTime!
+  dataFim: DateTime!
+  proprietario: Proprietario!
+  usuario: Usuario!
+  avaliacoes: [Avaliacao!]!
+  pagamento: Pagamento
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+input CreateAluguelInput {
+  titulo: String!
+  descricao: String!
+  preco: Float!
+  dataInicio: DateTime!
+  dataFim: DateTime!
+  proprietarioId: Int!
+  usuarioId: Int!
+}
+
+input UpdateAluguelInput {
+  titulo: String
+  descricao: String
+  preco: Float
+  dataInicio: DateTime
+  dataFim: DateTime
+  proprietarioId: Int
+  usuarioId: Int
+}

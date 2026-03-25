@@ -1,3 +1,5 @@
 extend type Mutation {
-    createUsuario(input: createUsuarioInput!): Usuario
+  createUsuario(data: CreateUsuarioInput!): Usuario!
+  updateUsuario(id: Int!, data: UpdateUsuarioInput!): Usuario!
+  deleteUsuario(id: Int!): Boolean!
 }

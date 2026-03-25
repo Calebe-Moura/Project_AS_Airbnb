@@ -1,25 +1,21 @@
-type Usuario {
+type Proprietario {
   id: Int!
   nome: String!
   email: String!
-  dataNascimento: DateTime!
   endereco: Endereco
   alugueis: [Aluguel!]!
-  avaliacoes: [Avaliacao!]!
   createdAt: DateTime!
   updatedAt: DateTime!
 }
 
-input CreateUsuarioInput {
+input CreateProprietarioInput {
   nome: String!
   email: String!
-  dataNascimento: DateTime!
   enderecoId: Int
 }
 
-input UpdateUsuarioInput {
+input UpdateProprietarioInput {
   nome: String
   email: String
-  dataNascimento: DateTime
   enderecoId: Int
 }

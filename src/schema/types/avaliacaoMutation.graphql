@@ -1,0 +1,5 @@
+extend type Mutation {
+  createAvaliacao(data: CreateAvaliacaoInput!): Avaliacao!
+  updateAvaliacao(id: Int!, data: UpdateAvaliacaoInput!): Avaliacao!
+  deleteAvaliacao(id: Int!): Boolean!
+}

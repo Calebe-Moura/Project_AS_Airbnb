@@ -2,20 +2,43 @@ type Endereco {
   id: Int!
   rua: String!
   numero: Int!
+  complemento: String
   cidade: String!
   estado: String!
-  cep: String
-  pais: String
-  longitude: Float
+  pais: String!
+  cep: String!
   latitude: Float
+  longitude: Float
+  usuario: Usuario
+  proprietario: Proprietario
+  createdAt: DateTime!
+  updatedAt: DateTime!
 }
 
-input createEnderecoInput {
+input CreateEnderecoInput {
   rua: String!
   numero: Int!
+  complemento: String
   cidade: String!
   estado: String!
+  pais: String!
   cep: String!
-  logitude: Float
   latitude: Float
+  longitude: Float
+  usuarioId: Int
+  proprietarioId: Int
+}
+
+input UpdateEnderecoInput {
+  rua: String
+  numero: Int
+  complemento: String
+  cidade: String
+  estado: String
+  pais: String
+  cep: String
+  latitude: Float
+  longitude: Float
+  usuarioId: Int
+  proprietarioId: Int
 }

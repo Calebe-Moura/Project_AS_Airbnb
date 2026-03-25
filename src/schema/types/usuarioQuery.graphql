@@ -1,4 +1,4 @@
 extend type Query {
-  usuarios: [Usuario]!
+  usuarios: [Usuario!]!
   usuario(id: Int!): Usuario
 }

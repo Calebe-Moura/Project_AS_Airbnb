@@ -7,26 +7,128 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// Enums
+enum MetodoPagamento {
+  PIX
+  CARTAO
+  BOLETO
+}
+
+enum StatusPagamento {
+  PENDENTE
+  PAGO
+  CANCELADO
+}
+
+// Models
 model Usuario {
-  id         Int      @id @default(autoincrement())
-  nome       String
-  email      String   @unique
-  idade      Int
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-  enderecoid Int
-  endereco   Endereco @relation(fields: [enderecoid], references: [id])
+  id             String         @id @default(uuid()) @db.Uuid
+  nome           String
+  email          String         @unique
+  dataNascimento DateTime
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+  
+  // Relations
+  alugueis       Aluguel[]
+  avaliacoes     Avaliacao[]
+  endereco       Endereco?      @relation("UsuarioEndereco")
+  
+  @@map("usuarios")
+}
+
+model Proprietario {
+  id             String         @id @default(uuid()) @db.Uuid
+  nome           String
+  email          String         @unique
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+  
+  // Relations
+  alugueis       Aluguel[]
+  endereco       Endereco?      @relation("ProprietarioEndereco")
+  
+  @@map("proprietarios")
+}
+
+model Aluguel {
+  id             String          @id @default(uuid()) @db.Uuid
+  titulo         String
+  descricao      String?
+  preco          Float           @db.Decimal(10, 2)
+  dataInicio     DateTime
+  dataFim        DateTime
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+  
+  // Relations
+  proprietarioId String          @map("proprietario_id") @db.Uuid
+  proprietario   Proprietario    @relation(fields: [proprietarioId], references: [id], onDelete: Restrict)
+  
+  usuarioId      String          @map("usuario_id") @db.Uuid
+  usuario        Usuario         @relation(fields: [usuarioId], references: [id], onDelete: Restrict)
+  
+  avaliacoes     Avaliacao[]
+  pagamento      Pagamento?      @relation("AluguelPagamento")
+  
+  @@unique([usuarioId, dataInicio])
+  @@map("alugueis")
+}
+
+model Avaliacao {
+  id             String          @id @default(uuid()) @db.Uuid
+  nota           Int
+  comentario     String?
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+  
+  // Relations
+  aluguelId      String          @map("aluguel_id") @db.Uuid
+  aluguel        Aluguel         @relation(fields: [aluguelId], references: [id], onDelete: Cascade)
+  
+  usuarioId      String          @map("usuario_id") @db.Uuid
+  usuario        Usuario         @relation(fields: [usuarioId], references: [id], onDelete: Restrict)
+  
+  @@unique([aluguelId, usuarioId])
+  @@map("avaliacoes")
+}
+
+model Pagamento {
+  id             String            @id @default(uuid()) @db.Uuid
+  valor          Float             @db.Decimal(10, 2)
+  metodo         MetodoPagamento
+  status         StatusPagamento   @default(PENDENTE)
+  dataPagamento  DateTime?
+  createdAt      DateTime          @default(now())
+  updatedAt      DateTime          @updatedAt
+  
+  // Relations
+  aluguelId      String            @unique @map("aluguel_id") @db.Uuid
+  aluguel        Aluguel           @relation("AluguelPagamento", fields: [aluguelId], references: [id], onDelete: Restrict)
+  
+  @@map("pagamentos")
 }
 
 model Endereco {
-  id        Int       @id @default(autoincrement())
-  rua       String
-  numero    String
-  cidade    String
-  estado    String
-  cep       String?
-  pais      String?
-  longitude Float?
-  latitude  Float?
-  usuario   Usuario[]
+  id               String         @id @default(uuid()) @db.Uuid
+  rua              String
+  numero           String?
+  complemento      String?
+  cidade           String
+  estado           String
+  pais             String
+  cep              String
+  latitude         Float?         @db.Decimal(10, 8)
+  longitude        Float?         @db.Decimal(11, 8)
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+  
+  // Relations
+  usuarioId        String?        @unique @map("usuario_id") @db.Uuid
+  usuario          Usuario?       @relation("UsuarioEndereco", fields: [usuarioId], references: [id], onDelete: SetNull)
+  
+  proprietarioId   String?        @unique @map("proprietario_id") @db.Uuid
+  proprietario     Proprietario?  @relation("ProprietarioEndereco", fields: [proprietarioId], references: [id], onDelete: SetNull)
+  
+  @@map("enderecos")
 }

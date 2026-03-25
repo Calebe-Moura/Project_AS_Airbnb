@@ -1,0 +1,6 @@
+extend type Query {
+  alugueis: [Aluguel!]!
+  aluguel(id: Int!): Aluguel
+  alugueisByProprietario(proprietarioId: Int!): [Aluguel!]!
+  alugueisByUsuario(usuarioId: Int!): [Aluguel!]!
+}
