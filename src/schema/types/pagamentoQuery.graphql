@@ -1,6 +1,4 @@
 extend type Query {
   pagamentos: [Pagamento!]!
   pagamento(id: Int!): Pagamento
-  pagamentosByAluguel(aluguelId: Int!): [Pagamento!]!
-  pagamentosByStatus(status: StatusPagamento!): [Pagamento!]!
 }

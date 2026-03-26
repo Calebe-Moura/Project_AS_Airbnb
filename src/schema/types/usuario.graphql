@@ -3,6 +3,7 @@ type Usuario {
   nome: String!
   email: String!
   dataNascimento: DateTime!
+
   endereco: Endereco
   alugueis: [Aluguel!]!
   avaliacoes: [Avaliacao!]!

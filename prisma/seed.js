@@ -43,44 +43,24 @@ async function main() {
     },
   });
 
-  const enderecoImovel = await prisma.endereco.create({
-    data: {
-      rua: "Rua dos Namorados",
-      numero: "100",
-      cidade: "Florianópolis",
-      estado: "SC",
-      pais: "Brasil",
-      cep: "88000-000",
-      latitude: -27.5969,
-      longitude: -48.5495,
-    },
-  });
-
-  const enderecoImovel2 = await prisma.endereco.create({
-    data: {
-      rua: "Av. Beira Mar",
-      numero: "500",
-      cidade: "Fortaleza",
-      estado: "CE",
-      pais: "Brasil",
-      cep: "60165-121",
-      latitude: -3.7275,
-      longitude: -38.475,
-    },
-  });
-
   console.log(`${await prisma.endereco.count()} endereços criados\n`);
 
   // ==================== CRIAR USUÁRIOS ====================
   console.log("Criando usuários...");
 
+  // Criar usuário primeiro
   const usuario = await prisma.usuario.create({
     data: {
       nome: "Calebe Moura",
       email: "calebe.moura@email.com",
       dataNascimento: new Date("1995-05-15"),
-      enderecoId: enderecoUsuario.id,
     },
+  });
+
+  // Depois associar o endereço ao usuário
+  await prisma.endereco.update({
+    where: { id: enderecoUsuario.id },
+    data: { usuarioId: usuario.id },
   });
 
   const usuario2 = await prisma.usuario.create({
@@ -104,12 +84,18 @@ async function main() {
   // ==================== CRIAR PROPRIETÁRIOS ====================
   console.log("Criando proprietários...");
 
+  // Criar proprietário primeiro
   const proprietario = await prisma.proprietario.create({
     data: {
       nome: "Maria Santos",
       email: "maria.santos@email.com",
-      enderecoId: enderecoProprietario.id,
     },
+  });
+
+  // Depois associar o endereço ao proprietário
+  await prisma.endereco.update({
+    where: { id: enderecoProprietario.id },
+    data: { proprietarioId: proprietario.id },
   });
 
   const proprietario2 = await prisma.proprietario.create({
@@ -119,9 +105,7 @@ async function main() {
     },
   });
 
-  console.log(
-    `${await prisma.proprietario.count()} proprietários criados\n`,
-  );
+  console.log(`${await prisma.proprietario.count()} proprietários criados\n`);
 
   // ==================== CRIAR IMÓVEIS (ALUGUEIS) ====================
   console.log("Criando imóveis para aluguel...");
@@ -170,7 +154,7 @@ async function main() {
   // ==================== CRIAR PAGAMENTOS ====================
   console.log("Criando pagamentos...");
 
-  const pagamento1 = await prisma.pagamento.create({
+  await prisma.pagamento.create({
     data: {
       valor: 850.0,
       metodo: "PIX",
@@ -180,7 +164,7 @@ async function main() {
     },
   });
 
-  const pagamento2 = await prisma.pagamento.create({
+  await prisma.pagamento.create({
     data: {
       valor: 450.0,
       metodo: "CARTAO",
@@ -190,7 +174,7 @@ async function main() {
     },
   });
 
-  const pagamento3 = await prisma.pagamento.create({
+  await prisma.pagamento.create({
     data: {
       valor: 320.0,
       metodo: "BOLETO",
@@ -204,7 +188,7 @@ async function main() {
   // ==================== CRIAR AVALIAÇÕES ====================
   console.log("Criando avaliações...");
 
-  const avaliacao1 = await prisma.avaliacao.create({
+  await prisma.avaliacao.create({
     data: {
       nota: 5,
       comentario:
@@ -214,7 +198,7 @@ async function main() {
     },
   });
 
-  const avaliacao2 = await prisma.avaliacao.create({
+  await prisma.avaliacao.create({
     data: {
       nota: 4,
       comentario:
@@ -224,7 +208,7 @@ async function main() {
     },
   });
 
-  const avaliacao3 = await prisma.avaliacao.create({
+  await prisma.avaliacao.create({
     data: {
       nota: 5,
       comentario:

@@ -1,13 +1,15 @@
-import EnderecoService from "./service.js";
+import enderecoService from './service.js';
 
-export const EnderecoQuery = {
-  enderecos: async () => {
-    return EnderecoService.getAllEnderecos();
-  },
-
-  endereco: async (_, { id }) => {
-    return EnderecoService.getEnderecoById(id);
-  },
+export const enderecoQueryResolvers = {
+  Query: {
+    enderecos: async (_, { skip = 0, take = 10, filters = {} }) => {
+      return enderecoService.findAllEnderecos(skip, take, filters);
+    },
+    
+    endereco: async (_, { id }) => {
+      return enderecoService.findEnderecoById(id);
+    }
+  }
 };
 
-export default EnderecoQuery;
+export default enderecoQueryResolvers;

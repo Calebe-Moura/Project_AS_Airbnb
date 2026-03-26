@@ -1,6 +1,4 @@
 extend type Query {
   avaliacoes: [Avaliacao!]!
   avaliacao(id: Int!): Avaliacao
-  avaliacoesByAluguel(aluguelId: Int!): [Avaliacao!]!
-  avaliacoesByUsuario(usuarioId: Int!): [Avaliacao!]!
 }

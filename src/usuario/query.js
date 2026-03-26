@@ -1,13 +1,16 @@
-import UsuarioService from "./service.js";
+import usuarioService from './service.js';
 
-export const UsuarioQuery = {
-  usuarios: async () => {
-    return UsuarioService.getAllUsuarios();
-  },
-
-  usuario: async (_, { id }) => {
-    return UsuarioService.getUsuarioById(id);
-  },
+export const usuarioQueryResolvers = {
+  Query: {
+    usuarios: async (_, { skip = 0, take = 10, filters = {} }) => {
+      return usuarioService.findAllUsuarios(skip, take, filters);
+    },
+    
+    usuario: async (_, { id }) => {
+      return usuarioService.findUsuarioById(id);
+    }
+    
+  }
 };
 
-export default UsuarioQuery;
+export default usuarioQueryResolvers;
