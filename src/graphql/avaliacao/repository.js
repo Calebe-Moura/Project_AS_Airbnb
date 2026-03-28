@@ -1,4 +1,4 @@
-import prisma from '../lib/prisma.js';
+import prisma from "../../lib/prisma.js";
 
 class AvaliacaoRepository {
   async create(data) {
@@ -7,16 +7,16 @@ class AvaliacaoRepository {
         nota: data.nota,
         comentario: data.comentario,
         aluguelId: data.aluguelId,
-        usuarioId: data.usuarioId
+        usuarioId: data.usuarioId,
       },
       include: {
         usuario: true,
         aluguel: {
           include: {
-            proprietario: true
-          }
-        }
-      }
+            proprietario: true,
+          },
+        },
+      },
     });
     return avaliacao;
   }
@@ -28,10 +28,10 @@ class AvaliacaoRepository {
         usuario: true,
         aluguel: {
           include: {
-            proprietario: true
-          }
-        }
-      }
+            proprietario: true,
+          },
+        },
+      },
     });
     return avaliacao;
   }
@@ -42,19 +42,18 @@ class AvaliacaoRepository {
       take: parseInt(take),
       include: {
         usuario: true,
-        aluguel: true
+        aluguel: true,
       },
       orderBy: {
-        createdAt: 'desc'
-      }
+        createdAt: "desc",
+      },
     });
     return avaliacoes;
   }
 
-
   async update(id, data) {
     const updateData = {};
-    
+
     if (data.nota !== undefined) updateData.nota = data.nota;
     if (data.comentario !== undefined) updateData.comentario = data.comentario;
     if (data.aluguelId !== undefined) updateData.aluguelId = data.aluguelId;
@@ -65,19 +64,18 @@ class AvaliacaoRepository {
       data: updateData,
       include: {
         usuario: true,
-        aluguel: true
-      }
+        aluguel: true,
+      },
     });
     return avaliacao;
   }
 
   async delete(id) {
     const avaliacao = await prisma.avaliacao.delete({
-      where: { id: parseInt(id) }
+      where: { id: parseInt(id) },
     });
     return avaliacao;
   }
-
 }
 
 export default new AvaliacaoRepository();

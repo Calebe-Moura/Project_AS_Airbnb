@@ -1,4 +1,4 @@
-import prisma from '../lib/prisma.js';
+import prisma from "../../lib/prisma.js";
 
 class ProprietarioRepository {
   async create(data) {
@@ -6,11 +6,11 @@ class ProprietarioRepository {
       data: {
         nome: data.nome,
         email: data.email,
-        enderecoId: data.enderecoId || null
+        enderecoId: data.enderecoId || null,
       },
       include: {
-        endereco: true
-      }
+        endereco: true,
+      },
     });
     return proprietario;
   }
@@ -24,10 +24,10 @@ class ProprietarioRepository {
           include: {
             usuario: true,
             pagamento: true,
-            avaliacoes: true
-          }
-        }
-      }
+            avaliacoes: true,
+          },
+        },
+      },
     });
     return proprietario;
   }
@@ -40,20 +40,20 @@ class ProprietarioRepository {
         endereco: true,
         _count: {
           select: {
-            alugueis: true
-          }
-        }
+            alugueis: true,
+          },
+        },
       },
       orderBy: {
-        createdAt: 'desc'
-      }
+        createdAt: "desc",
+      },
     });
     return proprietarios;
   }
 
   async update(id, data) {
     const updateData = {};
-    
+
     if (data.nome !== undefined) updateData.nome = data.nome;
     if (data.email !== undefined) updateData.email = data.email;
     if (data.enderecoId !== undefined) updateData.enderecoId = data.enderecoId;
@@ -62,19 +62,18 @@ class ProprietarioRepository {
       where: { id: parseInt(id) },
       data: updateData,
       include: {
-        endereco: true
-      }
+        endereco: true,
+      },
     });
     return proprietario;
   }
 
   async delete(id) {
     const proprietario = await prisma.proprietario.delete({
-      where: { id: parseInt(id) }
+      where: { id: parseInt(id) },
     });
     return proprietario;
   }
-
 }
 
 export default new ProprietarioRepository();

@@ -1,4 +1,4 @@
-import prisma from '../lib/prisma.js';
+import prisma from "../../lib/prisma.js";
 
 class AluguelRepository {
   async create(data) {
@@ -10,12 +10,12 @@ class AluguelRepository {
         dataInicio: new Date(data.dataInicio),
         dataFim: new Date(data.dataFim),
         proprietarioId: data.proprietarioId,
-        usuarioId: data.usuarioId
+        usuarioId: data.usuarioId,
       },
       include: {
         proprietario: true,
-        usuario: true
-      }
+        usuario: true,
+      },
     });
     return aluguel;
   }
@@ -26,21 +26,21 @@ class AluguelRepository {
       include: {
         proprietario: {
           include: {
-            endereco: true
-          }
+            endereco: true,
+          },
         },
         usuario: {
           include: {
-            endereco: true
-          }
+            endereco: true,
+          },
         },
         avaliacoes: {
           include: {
-            usuario: true
-          }
+            usuario: true,
+          },
         },
-        pagamento: true
-      }
+        pagamento: true,
+      },
     });
     return aluguel;
   }
@@ -55,27 +55,28 @@ class AluguelRepository {
         pagamento: true,
         _count: {
           select: {
-            avaliacoes: true
-          }
-        }
+            avaliacoes: true,
+          },
+        },
       },
       orderBy: {
-        createdAt: 'desc'
-      }
+        createdAt: "desc",
+      },
     });
     return alugueis;
   }
 
-
   async update(id, data) {
     const updateData = {};
-    
+
     if (data.titulo !== undefined) updateData.titulo = data.titulo;
     if (data.descricao !== undefined) updateData.descricao = data.descricao;
     if (data.preco !== undefined) updateData.preco = data.preco;
-    if (data.dataInicio !== undefined) updateData.dataInicio = new Date(data.dataInicio);
+    if (data.dataInicio !== undefined)
+      updateData.dataInicio = new Date(data.dataInicio);
     if (data.dataFim !== undefined) updateData.dataFim = new Date(data.dataFim);
-    if (data.proprietarioId !== undefined) updateData.proprietarioId = data.proprietarioId;
+    if (data.proprietarioId !== undefined)
+      updateData.proprietarioId = data.proprietarioId;
     if (data.usuarioId !== undefined) updateData.usuarioId = data.usuarioId;
 
     const aluguel = await prisma.aluguel.update({
@@ -83,15 +84,15 @@ class AluguelRepository {
       data: updateData,
       include: {
         proprietario: true,
-        usuario: true
-      }
+        usuario: true,
+      },
     });
     return aluguel;
   }
 
   async delete(id) {
     const aluguel = await prisma.aluguel.delete({
-      where: { id: parseInt(id) }
+      where: { id: parseInt(id) },
     });
     return aluguel;
   }

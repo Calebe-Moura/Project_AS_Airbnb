@@ -1,4 +1,4 @@
-import prisma from '../lib/prisma.js';
+import prisma from "../../lib/prisma.js";
 
 class EnderecoRepository {
   async create(data) {
@@ -14,12 +14,12 @@ class EnderecoRepository {
         latitude: data.latitude,
         longitude: data.longitude,
         usuarioId: data.usuarioId || null,
-        proprietarioId: data.proprietarioId || null
+        proprietarioId: data.proprietarioId || null,
       },
       include: {
         usuario: true,
-        proprietario: true
-      }
+        proprietario: true,
+      },
     });
     return endereco;
   }
@@ -29,33 +29,32 @@ class EnderecoRepository {
       where: { id: parseInt(id) },
       include: {
         usuario: true,
-        proprietario: true
-      }
+        proprietario: true,
+      },
     });
     return endereco;
   }
 
-  async findAll(skip = 0, take = 10) {
+  async findAll() {
     const enderecos = await prisma.endereco.findMany({
-      skip: parseInt(skip),
-      take: parseInt(take),
       include: {
         usuario: true,
-        proprietario: true
+        proprietario: true,
       },
       orderBy: {
-        createdAt: 'desc'
-      }
+        createdAt: "desc",
+      },
     });
     return enderecos;
   }
 
   async update(id, data) {
     const updateData = {};
-    
+
     if (data.rua !== undefined) updateData.rua = data.rua;
     if (data.numero !== undefined) updateData.numero = data.numero;
-    if (data.complemento !== undefined) updateData.complemento = data.complemento;
+    if (data.complemento !== undefined)
+      updateData.complemento = data.complemento;
     if (data.cidade !== undefined) updateData.cidade = data.cidade;
     if (data.estado !== undefined) updateData.estado = data.estado;
     if (data.pais !== undefined) updateData.pais = data.pais;
@@ -63,26 +62,26 @@ class EnderecoRepository {
     if (data.latitude !== undefined) updateData.latitude = data.latitude;
     if (data.longitude !== undefined) updateData.longitude = data.longitude;
     if (data.usuarioId !== undefined) updateData.usuarioId = data.usuarioId;
-    if (data.proprietarioId !== undefined) updateData.proprietarioId = data.proprietarioId;
+    if (data.proprietarioId !== undefined)
+      updateData.proprietarioId = data.proprietarioId;
 
     const endereco = await prisma.endereco.update({
       where: { id: parseInt(id) },
       data: updateData,
       include: {
         usuario: true,
-        proprietario: true
-      }
+        proprietario: true,
+      },
     });
     return endereco;
   }
 
   async delete(id) {
     const endereco = await prisma.endereco.delete({
-      where: { id: parseInt(id) }
+      where: { id: parseInt(id) },
     });
     return endereco;
   }
-
 }
 
 export default new EnderecoRepository();

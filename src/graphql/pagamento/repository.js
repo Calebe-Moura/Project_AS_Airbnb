@@ -1,4 +1,4 @@
-import prisma from '../lib/prisma.js';
+import prisma from "../../lib/prisma.js";
 
 class PagamentoRepository {
   async create(data) {
@@ -6,18 +6,18 @@ class PagamentoRepository {
       data: {
         valor: data.valor,
         metodo: data.metodo,
-        status: data.status || 'PENDENTE',
+        status: data.status || "PENDENTE",
         dataPagamento: data.dataPagamento ? new Date(data.dataPagamento) : null,
-        aluguelId: data.aluguelId
+        aluguelId: data.aluguelId,
       },
       include: {
         aluguel: {
           include: {
             proprietario: true,
-            usuario: true
-          }
-        }
-      }
+            usuario: true,
+          },
+        },
+      },
     });
     return pagamento;
   }
@@ -29,10 +29,10 @@ class PagamentoRepository {
         aluguel: {
           include: {
             proprietario: true,
-            usuario: true
-          }
-        }
-      }
+            usuario: true,
+          },
+        },
+      },
     });
     return pagamento;
   }
@@ -41,8 +41,8 @@ class PagamentoRepository {
     const pagamento = await prisma.pagamento.findUnique({
       where: { aluguelId: parseInt(aluguelId) },
       include: {
-        aluguel: true
-      }
+        aluguel: true,
+      },
     });
     return pagamento;
   }
@@ -55,13 +55,13 @@ class PagamentoRepository {
         aluguel: {
           include: {
             proprietario: true,
-            usuario: true
-          }
-        }
+            usuario: true,
+          },
+        },
       },
       orderBy: {
-        createdAt: 'desc'
-      }
+        createdAt: "desc",
+      },
     });
     return pagamentos;
   }
@@ -72,11 +72,11 @@ class PagamentoRepository {
       skip: parseInt(skip),
       take: parseInt(take),
       include: {
-        aluguel: true
+        aluguel: true,
       },
       orderBy: {
-        createdAt: 'desc'
-      }
+        createdAt: "desc",
+      },
     });
     return pagamentos;
   }
@@ -86,27 +86,29 @@ class PagamentoRepository {
       where: {
         createdAt: {
           gte: new Date(startDate),
-          lte: new Date(endDate)
-        }
+          lte: new Date(endDate),
+        },
       },
       include: {
-        aluguel: true
+        aluguel: true,
       },
       orderBy: {
-        createdAt: 'desc'
-      }
+        createdAt: "desc",
+      },
     });
     return pagamentos;
   }
 
   async update(id, data) {
     const updateData = {};
-    
+
     if (data.valor !== undefined) updateData.valor = data.valor;
     if (data.metodo !== undefined) updateData.metodo = data.metodo;
     if (data.status !== undefined) updateData.status = data.status;
     if (data.dataPagamento !== undefined) {
-      updateData.dataPagamento = data.dataPagamento ? new Date(data.dataPagamento) : null;
+      updateData.dataPagamento = data.dataPagamento
+        ? new Date(data.dataPagamento)
+        : null;
     }
     if (data.aluguelId !== undefined) updateData.aluguelId = data.aluguelId;
 
@@ -114,8 +116,8 @@ class PagamentoRepository {
       where: { id: parseInt(id) },
       data: updateData,
       include: {
-        aluguel: true
-      }
+        aluguel: true,
+      },
     });
     return pagamento;
   }
@@ -124,12 +126,12 @@ class PagamentoRepository {
     const pagamento = await prisma.pagamento.update({
       where: { id: parseInt(id) },
       data: {
-        status: 'PAGO',
-        dataPagamento: new Date()
+        status: "PAGO",
+        dataPagamento: new Date(),
       },
       include: {
-        aluguel: true
-      }
+        aluguel: true,
+      },
     });
     return pagamento;
   }
@@ -138,18 +140,18 @@ class PagamentoRepository {
     const pagamento = await prisma.pagamento.update({
       where: { id: parseInt(id) },
       data: {
-        status: 'CANCELADO'
+        status: "CANCELADO",
       },
       include: {
-        aluguel: true
-      }
+        aluguel: true,
+      },
     });
     return pagamento;
   }
 
   async delete(id) {
     const pagamento = await prisma.pagamento.delete({
-      where: { id: parseInt(id) }
+      where: { id: parseInt(id) },
     });
     return pagamento;
   }
@@ -161,10 +163,10 @@ class PagamentoRepository {
 
   async getTotalArrecadado() {
     const result = await prisma.pagamento.aggregate({
-      where: { status: 'PAGO' },
+      where: { status: "PAGO" },
       _sum: {
-        valor: true
-      }
+        valor: true,
+      },
     });
     return result._sum.valor || 0;
   }
