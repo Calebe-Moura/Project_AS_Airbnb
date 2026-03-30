@@ -1,0 +1,99 @@
+syntax = "proto3";
+
+package imovelPackage;
+
+// =========================
+// SERVICE
+// =========================
+service ImovelService {
+  rpc CreateImovel (CreateImovelRequest) returns (ImovelResponse);
+  rpc FindImovelById (IdRequest) returns (ImovelResponse);
+  rpc FindAllImovel (Empty) returns (ImovelListResponse);
+  rpc GetImoveisProximos (ImoveisProximosRequest) returns (ImovelListResponse);
+}
+
+// =========================
+// REQUESTS
+// =========================
+
+message CreateImovelRequest {
+  ImovelInput data = 1;
+}
+
+message IdRequest {
+  string id = 1;
+}
+
+message ImoveisProximosRequest {
+  string usuarioId = 1;
+  double latitude = 2;
+  double longitude = 3;
+  double raioKm = 4;
+}
+
+message Empty {}
+
+
+// =========================
+// INPUTS
+// =========================
+
+message ImovelInput {
+  string titulo = 1;
+  string descricao = 2;
+  double preco = 3;
+  string dataInicio = 4;
+  string dataFim = 5;
+
+  EnderecoInput endereco = 6;
+}
+
+message EnderecoInput {
+  string cep = 1;
+  string numero = 2;
+  string cidade = 3;
+  string estado = 4;
+  double latitude = 5;
+  double longitude = 6;
+}
+
+
+// =========================
+// RESPONSES
+// =========================
+
+message ImovelResponse {
+  string message = 1;
+  Imovel imovel = 2;
+}
+
+message ImovelListResponse {
+  repeated Imovel imoveis = 1;
+  int32 total = 2;
+  double raioKm = 3;
+}
+
+
+// =========================
+// ENTITIES
+// =========================
+
+message Imovel {
+  string id = 1;
+  string titulo = 2;
+  string descricao = 3;
+  double preco = 4;
+  string dataInicio = 5;
+  string dataFim = 6;
+
+  Endereco endereco = 7;
+}
+
+message Endereco {
+  string cep = 1;
+  string numero = 2;
+  string cidade = 3;
+  string estado = 4;
+  double latitude = 5;
+  double longitude = 6;
+}

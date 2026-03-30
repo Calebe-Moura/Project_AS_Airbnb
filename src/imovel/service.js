@@ -1,4 +1,4 @@
-import ImovelRepository from "./repository";
+import ImovelDatasource from "./repository";
 import axios from "axios";
 
 const api = axios.create({
@@ -49,7 +49,7 @@ function calcularDistancia(lat1, lon1, lat2, lon2) {
 class ImovelService {
   async create(data) {
     try {
-      const imovel = await ImovelRepository.create(data);
+      const imovel = await ImovelDatasource.create(data);
       return imovel;
     } catch (error) {
       throw new Error("Erro ao criar imóvel");
@@ -58,7 +58,7 @@ class ImovelService {
 
   async findImovelById(id) {
     try {
-      const imovel = await ImovelRepository.findById(id);
+      const imovel = await ImovelDatasource.findById(id);
       return imovel;
     } catch (error) {
       throw new Error("Erro ao encontrar imóvel");
@@ -67,7 +67,7 @@ class ImovelService {
 
   async findAllImovel() {
     try {
-      const imoveis = await ImovelRepository.findAll();
+      const imoveis = await ImovelDatasource.findAll();
       return imoveis;
     } catch (error) {
       throw new Error("Erro ao listar imóveis");
@@ -78,7 +78,7 @@ class ImovelService {
     try {
       const enderecos = await getEnderecosUsuario(usuarioId);
 
-      const imoveis = await ImovelRepository.findAll();
+      const imoveis = await ImovelDatasource.findAll();
 
       const imoveisProximos = imoveis.filter((imovel) => {
         const endereco = enderecos.find((e) => e.id === imovel.enderecoId);
@@ -100,6 +100,14 @@ class ImovelService {
       throw new Error("Erro ao buscar imóveis próximos");
     }
   }
-}
 
+  async findEnderecoImovel(id) {
+    try {
+      const endereco = await ImovelDatasource.findEndercoImovel(id);
+      return endereco;
+    } catch (error) {
+      throw new Error("Erro ao buscar endereço do imóvel");
+    }
+  }
+}
 export default new ImovelService();

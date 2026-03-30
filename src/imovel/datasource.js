@@ -1,6 +1,6 @@
 import prisma from '../../lib/prisma.js';
 
-class ImovelRepository {
+class ImovelDatasource {
   async create(data) {
     const imovel = await prisma.imovel.create({
       data: {
@@ -32,6 +32,18 @@ class ImovelRepository {
       return imoveis;
     }
 
+    async findEndercoImovel(id) {
+      const endereco = await prisma.imovel.findUnique({
+        where: {
+          id
+        },
+        select: {
+          endereco: true
+        }
+      });
+      return endereco;
+    }
+
 }
 
-export default new ImovelRepository();
+export default new ImovelDatasource();
