@@ -1,99 +1,47 @@
 syntax = "proto3";
 
-package imovelPackage;
+package imoveis;
 
-// =========================
-// SERVICE
-// =========================
-service ImovelService {
-  rpc CreateImovel (CreateImovelRequest) returns (ImovelResponse);
-  rpc FindImovelById (IdRequest) returns (ImovelResponse);
-  rpc FindAllImovel (Empty) returns (ImovelListResponse);
-  rpc GetImoveisProximos (ImoveisProximosRequest) returns (ImovelListResponse);
+service ImoveisService {
+  rpc BuscarImoveisProximos (BuscarImoveisRequest) returns (BuscarImoveisResponse);
+  rpc BuscarImovelPorId (ImovelIdRequest) returns (ImovelResponse);
 }
 
-// =========================
-// REQUESTS
-// =========================
-
-message CreateImovelRequest {
-  ImovelInput data = 1;
+message BuscarImoveisRequest {
+  double latitude = 1;
+  double longitude = 2;
+  double raio_km = 3;
 }
 
-message IdRequest {
-  string id = 1;
+message BuscarImoveisResponse {
+  repeated ImovelResponse imoveis = 1;
+  int32 total_encontrados = 2;
 }
 
-message ImoveisProximosRequest {
-  string usuarioId = 1;
-  double latitude = 2;
-  double longitude = 3;
-  double raioKm = 4;
+message ImovelIdRequest {
+  int32 id = 1;
 }
-
-message Empty {}
-
-
-// =========================
-// INPUTS
-// =========================
-
-message ImovelInput {
-  string titulo = 1;
-  string descricao = 2;
-  double preco = 3;
-  string dataInicio = 4;
-  string dataFim = 5;
-
-  EnderecoInput endereco = 6;
-}
-
-message EnderecoInput {
-  string cep = 1;
-  string numero = 2;
-  string cidade = 3;
-  string estado = 4;
-  double latitude = 5;
-  double longitude = 6;
-}
-
-
-// =========================
-// RESPONSES
-// =========================
 
 message ImovelResponse {
-  string message = 1;
-  Imovel imovel = 2;
-}
-
-message ImovelListResponse {
-  repeated Imovel imoveis = 1;
-  int32 total = 2;
-  double raioKm = 3;
-}
-
-
-// =========================
-// ENTITIES
-// =========================
-
-message Imovel {
-  string id = 1;
+  int32 id = 1;
   string titulo = 2;
   string descricao = 3;
-  double preco = 4;
-  string dataInicio = 5;
-  string dataFim = 6;
-
-  Endereco endereco = 7;
-}
-
-message Endereco {
-  string cep = 1;
-  string numero = 2;
-  string cidade = 3;
-  string estado = 4;
+  double preco_noite = 4;
   double latitude = 5;
   double longitude = 6;
+  int32 quartos = 7;
+  int32 banheiros = 8;
+  int32 capacidade = 9;
+  double distancia_km = 10;
+  ProprietarioInfo proprietario = 11;
+}
+
+message ProprietarioInfo {
+  int32 id = 1;
+  string nome = 2;
+  string email = 3;
+}
+
+message ListaImoveisResponse {
+  repeated ImovelResponse imoveis = 1;
 }
