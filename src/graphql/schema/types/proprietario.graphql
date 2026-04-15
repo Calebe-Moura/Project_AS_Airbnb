@@ -1,0 +1,19 @@
+type Proprietario {
+  id: String!
+  nome: String!
+  email: String!
+  endereco: Endereco
+  alugueis: [Aluguel!]!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+input CreateProprietarioInput {
+  nome: String!
+  email: String!
+}
+
+input UpdateProprietarioInput {
+  nome: String
+  email: String
+}

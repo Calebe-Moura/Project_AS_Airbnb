@@ -1,0 +1,24 @@
+type Usuario {
+  id: String!
+  nome: String!
+  email: String!
+  dataNascimento: DateTime!
+
+  endereco: Endereco
+  alugueis: [Aluguel!]!
+  avaliacoes: [Avaliacao!]!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+input CreateUsuarioInput {
+  nome: String!
+  email: String!
+  dataNascimento: DateTime!
+}
+
+input UpdateUsuarioInput {
+  nome: String
+  email: String
+  dataNascimento: DateTime
+}

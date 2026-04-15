@@ -1,0 +1,40 @@
+syntax = "proto3";
+
+package lugares;
+
+service LugaresService {
+  rpc BuscarLugaresProximos (BuscarLugaresRequest) returns (BuscarLugaresResponse);
+  rpc BuscarPorCategoria (BuscarPorCategoriaRequest) returns (BuscarLugaresResponse);
+}
+
+message BuscarLugaresRequest {
+  double latitude = 1;
+  double longitude = 2;
+  double raio_km = 3;
+  string tipo = 4; // restaurante, parque, museu, shopping, etc
+  int32 limite = 5;
+}
+
+message BuscarPorCategoriaRequest {
+  string cidade = 1;
+  string categoria = 2;
+  int32 limite = 3;
+}
+
+message BuscarLugaresResponse {
+  repeated Lugar lugares = 1;
+  int32 total_encontrados = 2;
+  string fonte_dados = 3;
+}
+
+message Lugar {
+  string id = 1;
+  string nome = 2;
+  string endereco = 3;
+  double latitude = 4;
+  double longitude = 5;
+  double distancia_km = 6;
+  string categoria = 7;
+  double avaliacao = 8;
+  string descricao = 9;
+}

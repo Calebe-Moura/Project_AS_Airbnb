@@ -1,0 +1,5 @@
+extend type Mutation {
+  createAluguel(data: CreateAluguelInput!): Aluguel!
+  updateAluguel(id: String!, data: UpdateAluguelInput!): Aluguel!
+  deleteAluguel(id: String!): Boolean!
+}

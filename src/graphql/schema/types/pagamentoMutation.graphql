@@ -1,0 +1,7 @@
+extend type Mutation {
+  createPagamento(data: CreatePagamentoInput!): Pagamento!
+  updatePagamento(id: String!, data: UpdatePagamentoInput!): Pagamento!
+  deletePagamento(id: String!): Boolean!
+  processarPagamento(id: String!): Pagamento!
+  cancelarPagamento(id: String!): Pagamento!
+}

@@ -1,0 +1,5 @@
+extend type Mutation {
+  createProprietario(data: CreateProprietarioInput!): Proprietario!
+  updateProprietario(id: String!, data: UpdateProprietarioInput!): Proprietario!
+  deleteProprietario(id: String!): Boolean!
+}

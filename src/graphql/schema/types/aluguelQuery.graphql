@@ -1,0 +1,4 @@
+extend type Query {
+  alugueis: [Aluguel!]!
+  aluguel(id: String!): Aluguel
+}

@@ -1,0 +1,4 @@
+extend type Query {
+  pagamentos: [Pagamento!]!
+  pagamento(id: String!): Pagamento
+}

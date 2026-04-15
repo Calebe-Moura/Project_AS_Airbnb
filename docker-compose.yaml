@@ -1,0 +1,97 @@
+version: "3.9"
+
+services:
+  db:
+    image: postgres:15
+    container_name: graphql_db
+    restart: always
+    environment:
+      POSTGRES_DB: airbnb_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - kong-net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  kong-migration:
+    image: kong:3.7
+    container_name: kong_migration
+    command: kong migrations bootstrap
+    environment:
+      KONG_DATABASE: postgres
+      KONG_PG_HOST: db
+      KONG_PG_DATABASE: kong
+      KONG_PG_USER: postgres
+      KONG_PG_PASSWORD: postgres
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - kong-net
+    restart: on-failure
+
+  kong:
+    image: kong:3.7
+    container_name: kong_gateway
+    restart: on-failure:10
+    ports:
+      - 8000:8000
+      - 8443:8443
+      - 8001:8001
+      - 8444:8444
+      - 8002:8002
+      - 8445:8445
+      - 8003:8003
+      - 8004:8004
+    environment:
+      KONG_DATABASE: postgres
+      KONG_PG_HOST: db
+      KONG_PG_DATABASE: kong
+      KONG_PG_USER: postgres
+      KONG_PG_PASSWORD: postgres
+      KONG_DECLARATIVE_CONFIG: /kong/declarative/kong.yml
+      KONG_PROXY_ACCESS_LOG: /dev/stdout
+      KONG_ADMIN_ACCESS_LOG: /dev/stdout
+      KONG_PROXY_ERROR_LOG: /dev/stderr
+      KONG_ADMIN_ERROR_LOG: /dev/stderr
+      KONG_LOG_LEVEL: info                              
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - ./kong.yml:/kong/declarative/kong.yml
+    depends_on:
+      - kong-migration
+      - graphql_api
+    networks:
+      - kong-net
+
+  graphql_api:
+    build:
+      context: .
+    container_name: graphql-airbnb-service
+    command: nodemon src/graphql/apolloserver.js
+    ports:
+      - "4000:4000"
+    volumes:
+      - .:/app
+    working_dir: /app
+    depends_on:
+      - db
+    networks:
+      - kong-net
+
+networks:
+  kong-net:
+    driver: bridge
+
+volumes:
+  pgdata:
+    name: airbnb_pgdata

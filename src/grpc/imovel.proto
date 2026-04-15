@@ -1,0 +1,47 @@
+syntax = "proto3";
+
+package imoveis;
+
+service ImoveisService {
+  rpc BuscarImoveisProximos (BuscarImoveisRequest) returns (BuscarImoveisResponse);
+  rpc BuscarImovelPorId (ImovelIdRequest) returns (ImovelResponse);
+}
+
+message BuscarImoveisRequest {
+  double latitude = 1;
+  double longitude = 2;
+  double raio_km = 3;
+}
+
+message BuscarImoveisResponse {
+  repeated ImovelResponse imoveis = 1;
+  int32 total_encontrados = 2;
+}
+
+message ImovelIdRequest {
+  int32 id = 1;
+}
+
+message ImovelResponse {
+  int32 id = 1;
+  string titulo = 2;
+  string descricao = 3;
+  double preco_noite = 4;
+  double latitude = 5;
+  double longitude = 6;
+  int32 quartos = 7;
+  int32 banheiros = 8;
+  int32 capacidade = 9;
+  double distancia_km = 10;
+  ProprietarioInfo proprietario = 11;
+}
+
+message ProprietarioInfo {
+  int32 id = 1;
+  string nome = 2;
+  string email = 3;
+}
+
+message ListaImoveisResponse {
+  repeated ImovelResponse imoveis = 1;
+}

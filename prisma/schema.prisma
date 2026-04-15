@@ -1,0 +1,158 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Usuario {
+  id             String      @id @default(uuid()) @db.Uuid
+  nome           String
+  email          String      @unique
+  dataNascimento DateTime
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+
+  alugueis       Aluguel[]
+  avaliacoes     Avaliacao[]
+  endereco       Endereco?
+
+  @@map("usuarios")
+}
+
+model Proprietario {
+  id        String    @id @default(uuid()) @db.Uuid
+  nome      String
+  email     String    @unique
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  
+  alugueis  Aluguel[]
+  endereco  Endereco?
+
+  @@map("proprietarios")
+}
+
+model Aluguel {
+  id             String         @id @default(uuid()) @db.Uuid
+  titulo         String
+  descricao      String?        @db.Text
+  preco          Decimal        @db.Decimal(10, 2)
+  dataInicio     DateTime
+  dataFim        DateTime
+  status         AluguelStatus  @default(ATIVO)
+
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+  deletedAt      DateTime?
+
+  proprietarioId String         @map("proprietario_id") @db.Uuid
+  usuarioId      String         @map("usuario_id") @db.Uuid
+
+  proprietario   Proprietario   @relation(fields: [proprietarioId], references: [id])
+  usuario        Usuario        @relation(fields: [usuarioId], references: [id])
+
+  avaliacoes     Avaliacao[]
+  pagamentos     Pagamento[]
+
+  @@index([proprietarioId])
+  @@index([usuarioId])
+  @@map("alugueis")
+}
+
+model Avaliacao {
+  id         String   @id @default(uuid()) @db.Uuid
+  nota       Int
+  comentario String?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  aluguelId  String   @map("aluguel_id") @db.Uuid
+  usuarioId  String   @map("usuario_id") @db.Uuid
+
+  aluguel    Aluguel  @relation(fields: [aluguelId], references: [id], onDelete: Cascade)
+  usuario    Usuario  @relation(fields: [usuarioId], references: [id])
+
+  @@unique([aluguelId, usuarioId])
+  @@index([usuarioId])
+  @@index([aluguelId])
+  @@map("avaliacoes")
+}
+
+model Pagamento {
+  id            String          @id @default(uuid()) @db.Uuid
+  valor         Decimal         @db.Decimal(10, 2)
+  metodo        MetodoPagamento
+  status        StatusPagamento @default(PENDENTE)
+  dataPagamento DateTime?
+
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+
+  aluguelId     String          @map("aluguel_id") @db.Uuid
+  aluguel       Aluguel         @relation(fields: [aluguelId], references: [id])
+
+  @@index([aluguelId])
+  @@map("pagamentos")
+}
+
+model Endereco {
+  id          String   @id @default(uuid()) @db.Uuid
+  rua         String
+  numero      String?
+  complemento String?
+  cidade      String
+  estado      String
+  pais        String
+  cep         String
+
+  latitude    Decimal? @db.Decimal(10, 8)
+  longitude   Decimal? @db.Decimal(11, 8)
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  usuarioId      String? @unique @db.Uuid
+  proprietarioId String? @unique @db.Uuid
+
+  usuario        Usuario?      @relation(fields: [usuarioId], references: [id])
+  proprietario   Proprietario? @relation(fields: [proprietarioId], references: [id])
+
+  @@map("enderecos")
+}
+
+enum MetodoPagamento {
+  PIX
+  CARTAO
+  BOLETO
+}
+
+enum StatusPagamento {
+  PENDENTE
+  PAGO
+  CANCELADO
+}
+
+enum AluguelStatus {
+  ATIVO
+  FINALIZADO
+  CANCELADO
+}
+
+model Imovel{
+    id String @id @default(uuid()) @db.Uuid
+    proprietario_id String@unique @db.Uuid
+    aluguel_id String? @unique @db.Uuid
+    avaliacao_id String?
+    tipoImovel TipeImovel
+}
+
+enum TipeImovel{
+    APARTAMENTO
+    CASA
+    RESORT
+    SITIO
+    POUSADA
+}
